@@ -1,0 +1,73 @@
+<!-- display_injury_report.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Container for the download button -->
+    {% if not request.GET.pdf %}
+    <div class="container-fluid">
+        <div class="pdf-download-button">
+            <a href="{% url 'download_pdf' %}?pdf=true" class="btn btn-secondary">Download PDF</a>
+        </div>
+    </div>
+    {% endif %}
+    <div class="report-content">
+        <h1>Medico-Legal Injury Report</h1>
+        <!-- Link to the Django view that generates the PDF 
+        <a href="{% url 'download_pdf' %}" class="download-button">Download PDF</a>
+        -->
+     
+        <h2>General Information</h2>
+        {% for key, value in report_data.form_data.items %}
+            <p><strong>{{ key|capfirst }}:</strong> {{ value }}</p>
+        {% endfor %}
+
+        <h2>Brought By</h2>
+        {% for key, value in report_data.brought_by_data.items %}
+            <p><strong>{{ key|capfirst }}:</strong> {{ value }}</p>
+        {% endfor %}
+
+        <h2>General Condition</h2>
+        {% for key, value in report_data.general_condition_data.items %}
+            {% if field.name != 'bp_systolic' and field.name != 'bp_diastolic' and field.name != 'others' %}
+                <p><strong>{{ key|capfirst }}:</strong> {{ value }}</p>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Custom display for BP -->
+        <p><strong>BP:</strong> 
+            {{ report_data.general_condition_data.bp_systolic }} / 
+            {{ report_data.general_condition_data.bp_diastolic }}
+        </p>
+
+        <!-- Display 'others' field from general condition -->
+        <p><strong>Others:</strong> 
+            {{ report_data.general_condition_data.others }}
+        </p>
+
+        <h2>Referral</h2>
+        {% for key, value in report_data.referral_data.items %}
+            <p><strong>{{ key|capfirst }}:</strong> {{ value }}</p>
+        {% endfor %}
+
+        <h2>Injuries</h2>
+        {% for injury in report_data.injuries_data %}
+        <div class="injury-section">
+            <h4>Injury {{ forloop.counter }}</h4>
+            <p><strong>Type:</strong> {{ injury.injury_type }}</p>
+            <p><strong>Size:</strong> {{ injury.size }}</p>
+            <p><strong>Location:</strong> {{ injury.location }}</p>
+            <p><strong>Nature:</strong> {{ injury.nature }}</p>
+            <p><strong>Caused By:</strong> {{ injury.caused_by }}</p>
+            <p><strong>Duration:</strong> {{ injury.duration }}</p>
+        </div>
+        {% endfor %}
+        <!--{% for key, value in report_data.injuries_data.items %}
+            <p><strong>{{ key|capfirst }}:</strong> {{ value }}</p>
+        {% endfor %}
+        -->
+    </div>
+    {% if not request.GET.pdf %}
+        <a href="{% url 'home' %}">Return to Home</a>
+    {% endif %}
+{% endblock %}

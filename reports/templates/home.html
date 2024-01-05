@@ -1,0 +1,20 @@
+<!-- reports/templates/home.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medico-Legal Reports</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="button-container">
+        <button class="report-button" onclick="location.href='{% url 'injury_report' %}'">Medico Legal Injury Report</button>
+        <br>
+        <button class="report-button" onclick="location.href='report_y/'">Report Y</button>
+        <br>
+        <button class="report-button" onclick="location.href='report_z/'">Report Z</button>
+    </div>
+</body>
+</html>

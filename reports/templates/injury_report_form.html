@@ -1,0 +1,71 @@
+<!-- injury_report_form.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Injury Report Form</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <h3>Brought By</h3>
+        {{ brought_by_form.as_p }}
+        <h3>General Condition</h3>
+        <!-- Custom rendering for BP fields within the general condition form -->
+        
+        <!--{{ general_condition_form.as_p }} -->
+        <!--<div class="bp-field"> -->
+          <!--   <label for="id_general_condition-bp_systolic">BP:</label> Manually written BP label -->
+          <!--   {{ general_condition_form.bp_systolic }} Systolic input -->
+          <!--  <span class="bp-slash">/</span>  Slash between inputs -->
+           <!-- {{ general_condition_form.bp_diastolic }} Diastolic input -->
+       <!-- </div>-->
+        
+        <!-- Render the general condition form fields except for 'bp_systolic', 'bp_diastolic', and 'others' -->
+        {% for field in general_condition_form %}
+            {% if field.name != 'bp_systolic' and field.name != 'bp_diastolic' and field.name != 'others' %}
+                <p>{{ field.label_tag }} {{ field }}</p>
+            {% endif %}
+        {% endfor %}
+        
+        <!-- Custom rendering for BP fields -->
+        <div class="bp-field">
+            <label for="id_general_condition-bp_systolic">BP:</label> <!-- Manually written BP label -->
+            {{ general_condition_form.bp_systolic }} <!-- Systolic input -->
+            <span class="bp-slash">/</span> <!-- Slash between inputs -->
+            {{ general_condition_form.bp_diastolic }} <!-- Diastolic input -->
+        </div>
+        
+        <!-- Render the 'others' field -->
+        <p>{{ general_condition_form.others.label_tag }} {{ general_condition_form.others }}</p>
+        
+        
+
+        <h3>Referral</h3>
+        {{ referral_form.as_p }}
+
+        <h3>Injuries</h3>
+        <div id="injury-form-container">
+            {{ injury_formset.management_form }}  <!-- Include the management form -->
+            {% for injury_form in injury_formset %}
+                <div class="injury-section">
+                    <h4>Injury {{ forloop.counter }}</h4>
+                    {{ injury_form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+        <!--</div>-->
+        {% if not pdf %}
+            <button type="button" id="add-injury-button">Add Injury</button>
+        {% endif %}
+        <!--<input type="hidden" id="injury-count" name="injury_count" value="{{ injuries_forms|length }}">
+        -->
+    
+        <input type="submit" value="Submit">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}

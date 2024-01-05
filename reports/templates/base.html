@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>{% block title %}Medical Reports{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- Additional styles -->
+    {% block styles %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <!-- Navbar or Header Content Here -->
+    </header>
+
+    <main role="main" class="container">
+        {% block content %}
+        <!-- Main content will be overridden by child templates -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Footer Content Here -->
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Additional scripts -->
+    {% block scripts %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const addButton = document.getElementById('add-injury-button');
+                const container = document.getElementById('injury-form-container');
+                const totalForms = document.getElementById('id_injuries-TOTAL_FORMS');
+        
+                function addDeleteButton(formWrapper, formIndex) {
+                    // Create a delete button only if it's not the first injury form
+                    if (formIndex > 0) {
+                        let deleteButton = document.createElement('button');
+                        deleteButton.type = 'button';
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.classList.add('btn', 'btn-danger', 'delete-injury-button');
+                        deleteButton.addEventListener('click', function() {
+                            formWrapper.remove();
+                            updateFormIndices();
+                        });
+                        formWrapper.appendChild(deleteButton);
+                    }
+                }
+        
+                function updateFormIndices() {
+                    // Update the index of each form after deletion
+                    let currentFormIndex = 0;
+                    document.querySelectorAll('.injury-section').forEach(section => {
+                        let header = section.querySelector('h4');
+                        header.textContent = 'Injury ' + (currentFormIndex + 1);
+                        let forms = section.querySelectorAll('input, select, textarea');
+                        forms.forEach(form => {
+                            const name = form.getAttribute('name');
+                            if (name) {
+                                form.setAttribute('name', name.replace(/injuries-\d+-/, `injuries-${currentFormIndex}-`));
+                                const id = form.getAttribute('id');
+                                if (id) {
+                                    form.setAttribute('id', id.replace(/injuries-\d+-/, `injuries-${currentFormIndex}-`));
+                                }
+                            }
+                        });
+                        currentFormIndex++;
+                    });
+                    totalForms.value = currentFormIndex;
+                }
+        
+                addButton.addEventListener('click', function(event) {
+                    event.preventDefault();
+        
+                    let formIndex = parseInt(totalForms.value, 10);
+                    let newForm = '{{ injury_formset.empty_form.as_p|escapejs }}';
+                    newForm = newForm.replace(/__prefix__/g, formIndex);
+        
+                    // Create a new header and form wrapper
+                    let newHeader = document.createElement('h4');
+                    newHeader.textContent = 'Injury ' + (formIndex + 1);
+                    let formWrapper = document.createElement('div');
+                    formWrapper.classList.add('injury-section');
+                    formWrapper.appendChild(newHeader);
+                    formWrapper.insertAdjacentHTML('beforeend', newForm);
+                    
+                    // Add delete button to the form wrapper
+                    addDeleteButton(formWrapper, formIndex);
+        
+                    container.appendChild(formWrapper);
+                    totalForms.value = formIndex + 1;
+                });
+            });
+        </script>     
+    {% endblock %}
+</body>
+</html>
