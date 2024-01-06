@@ -1,1 +1,1 @@
-web: gunicorn MedReports.wsgi --log-file -
+web: gunicorn medlgl.wsgi:application --log-file -
