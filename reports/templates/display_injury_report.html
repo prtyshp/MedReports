@@ -10,7 +10,7 @@
             <a href="{% url 'download_pdf' %}?pdf=true" class="btn btn-secondary">Download PDF</a>
         </div>
     </div>
-    {% endif %}
+    {% endif %} 
     <div class="report-content">
         <h1>Medico-Legal Injury Report</h1>
         <!-- Link to the Django view that generates the PDF 
@@ -69,5 +69,5 @@
     </div>
     {% if not request.GET.pdf %}
         <a href="{% url 'home' %}">Return to Home</a>
-    {% endif %}
+   {% endif %}
 {% endblock %}

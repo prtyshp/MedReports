@@ -6,6 +6,7 @@ from .forms import BaseInjuryFormSet, InjuryReportForm, BroughtByForm, GeneralCo
 
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+#import pdfkit
 #from weasyprint import HTML
 from xhtml2pdf import pisa
 
@@ -98,21 +99,28 @@ def download_pdf(request):
 
     # Render the HTML template with report data
     html_string = render_to_string('display_injury_report.html', {
-        'report_data': report_data,
-        'pdf': True # Add a flag to indicate PDF generation
+        'report_data': report_data
+      #  'pdf': True # Add a flag to indicate PDF generation
         })
 
     # Convert HTML to PDF
     # html = HTML(string=html_string)
     # pdf = html.write_pdf()
 
+    # Convert HTML to PDF
+    #pdf = pdfkit.from_string(html_string, False)
+    # Create HTTP response
+    # response = HttpResponse( content_type='application/pdf')
+    # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+
     # Create HTTP response
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
 
-    # Generate PDF
+    #Generate PDF
     pisa_status = pisa.CreatePDF(html_string, dest=response)
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html_string + '</pre>')
-    
+    #HTML(string=html_string).write_pdf(response)
+
     return response
