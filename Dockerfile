@@ -10,6 +10,14 @@ COPY requirements.txt /app/
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install system dependencies required for pycairo
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libcairo2 \
+    libcairo2-dev \
+    gcc \ 
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the rest of your application's code into the container at /app
 COPY . /app/
 
