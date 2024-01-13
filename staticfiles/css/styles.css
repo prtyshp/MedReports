@@ -1,0 +1,76 @@
+/* reports/static/css/styles.css */
+
+/* Apply global font to the body */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Style the container */
+.button-container {
+    text-align: center;
+    margin-top: 50px; /* Adjust the margin as needed */
+}
+
+/* Style the buttons */
+.report-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 20px 40px; /* Larger padding for bigger size */
+    margin: 10px; /* Margin for spacing between buttons */
+    border: none; /* No border */
+    border-radius: 5px; /* Slightly rounded corners for the buttons */
+    font-size: 24px; /* Larger font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+/* Hover effect for buttons */
+.report-button:hover {
+    background-color: #45a049; /* Darker shade of green on hover */
+}
+
+/* styles.css */
+
+.bp-field {
+    display: flex;
+    align-items: baseline; /* Align with the baseline of text for consistency */
+    margin-bottom: 10px; /* Spacing below the BP field */
+}
+
+.bp-input, .bp-slash {
+    margin-right: 5px; /* Spacing between elements */
+}
+
+
+
+.pdf-download-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.pdf-download-button .btn {
+    background-color: grey;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+#injury-form-container input[type="checkbox"] {
+    display: none;
+}
+/* Optionally, hide the label as well */
+#injury-form-container label[for^="id_injuries-"][for$="-DELETE"] {
+    display: none;
+}
+
+.report-content {
+    padding-top: 60px; /* Adjust padding to avoid overlap with PDF button */
+}
