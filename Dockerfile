@@ -16,11 +16,11 @@ COPY . /app/
 # Run database migrations
 RUN python manage.py migrate
 
-# Define environment variable for Django
-ENV DJANGO_SETTINGS_MODULE=medlgl.settings
-
 # Collect static files
 RUN python manage.py collectstatic --noinput
+
+# Define environment variable for Django
+ENV DJANGO_SETTINGS_MODULE=medlgl.settings
 
 # Railway sets the PORT environment variable to the port that the service is exposed on.
 # Your application should use this environment variable to listen on this port.
